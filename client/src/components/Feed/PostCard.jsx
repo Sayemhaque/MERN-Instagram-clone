@@ -4,7 +4,7 @@ import {  FaRegBookmark, FaRegComment, FaRegHeart, FaRegShareSquare} from "react
 
 const PostCard = () => {
     return (
-        <div className='max-w-[500px] mx-auto py-4'>
+        <div className='max-w-[470px] mx-auto py-4'>
             {/* user info */}
            <div className='flex items-center justify-between'>
            <div className='flex items-center gap-2'>
