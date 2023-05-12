@@ -5,12 +5,12 @@ import { Outlet } from 'react-router-dom';
 
 const Home = () => {
     return (
-        <div className='grid grid-cols-9'>
+        <div className='grid grid-cols-10 bg-[#f8f8f8]'>
             {/* Sidebar */}
             <Sidebar/>
             {/* Feed */}
             {/* <Feed/> */}
-            <div className='col-span-5 h-screen overflow-scroll scrollbar-hide'>
+            <div className='col-span-5 h-screen overflow-scroll scrollbar-hide px-4'>
             <Outlet/>
             </div>
          
