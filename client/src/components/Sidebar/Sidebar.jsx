@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { FaAirbnb, FaCompass, FaFileVideo, FaHeart, FaHome, FaMap, FaPlusSquare, FaRegCompass, FaRegFileVideo, FaRegHeart, FaRegPlusSquare, FaSearch } from "react-icons/fa";
 import CreatePostModal from '../CreatePostModal/CreatePostModal';
+import { AuthContext } from '../../Provider/AuthProvider';
 
 const Sidebar = () => {
+    const {user} = useContext(AuthContext)
     const navItem = [
         { text: "Home", icon: <FaHome /> },
         { text: "Search", icon: <FaSearch /> },
@@ -21,6 +23,7 @@ const Sidebar = () => {
                 <ul className='space-y-12 mt-12'>
                     {navItem.map(nav => <li className='flex items-center gap-3 cursor-pointer'> <span className='text-2xl'>{nav.icon}</span> {nav.text}</li>)}
                     <label htmlFor="my-modal-3" className='flex items-center gap-3 cursor-pointer'> <span className='text-2xl'><FaRegPlusSquare /></span>Create</label>
+                    <li>{user?.displayName}</li>
                 </ul>
             </nav>
            <CreatePostModal/>

@@ -1,14 +1,57 @@
+import { useContext, useState } from "react";
 import { FaGithub, FaGoogle } from "react-icons/fa";
-import { Link } from "react-router-dom";
-
+import { Link, useNavigate } from "react-router-dom";
+import { AuthContext } from "../../Provider/AuthProvider";
+import { getAuth, updateProfile } from "firebase/auth";
+import app from "../../Firebase/Firebase.config";
+const auth = getAuth(app)
 const Register = () => {
+  const [error,setError] = useState("")
+  const {createUser,logOut} = useContext(AuthContext)
+  const navigate = useNavigate()
+
+  const handleRegister = async (e) => {
+   e.preventDefault()
+   const form = e.target;
+   const name = form.name.value;
+   const email = form.email.value;
+   const photourl = form.photoUrl.value;
+   const password = form.password.value;
+   console.log(name,email,photourl,password);
+   createUser(email,password)
+   .then((result) => {
+    console.log(result.user)
+    updateUser(name,photourl)
+    logOutUser()
+    navigate("/login")
+   })
+   .catch(error => setError(error.message))
+  }
+
+  const updateUser = (name,photUrl) => {
+    updateProfile(auth.currentUser, {
+      displayName:name, photoURL: photUrl
+    }).then(() => {
+       console.log("updated Successfulluy")
+    }).catch((error) => {
+      setError(error.message)
+    });
+    
+  }
+
+  const logOutUser = () => {
+    logOut()
+  .then(() => {
+  })
+  .catch(error => console.log(error))
+  } 
     return (
         <div className="hero min-h-screen bg-gradient-to-b from-yellow-400 via-orange-400 to-pink-500">
         <div className="w-full flex justify-center">
           <div className="card  w-full max-w-lg shadow-2xl bg-base-100">
           <h1 className="text-center font-bold text-3xl py-5">Registation</h1>
             <div  className="card-body  bg-gray-200">
-            <form >
+            <form onSubmit={handleRegister}>
             <div className="form-control">
                 <label className="label">
                   <span className="label-text">Name</span>
@@ -33,7 +76,7 @@ const Register = () => {
                 </label>
                 <input type="password" placeholder="password" required name="password" className="input input-bordered" />
               </div>
-              {/* <p className="py-1 text-red-600">{error}</p> */}
+              <p className="py-1 text-red-600">{error}</p>
               <p className="mt-2">Already have an account ? <Link to="/login" className="underline">Log in</Link></p>
               <div className="form-control mt-6">
                 <button type="submit" className="w-full py-2 bg-amber-300">Register</button>

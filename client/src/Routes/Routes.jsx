@@ -11,11 +11,11 @@ import Register from "../pages/Register/Register";
 const router = createBrowserRouter([
     {
         path: "/",
-        element: <PrivateRoute><Home /></PrivateRoute>,
+        element: <Home />,
         children: [
             {
                 path: "/",
-                element: <Feed />
+                element: <PrivateRoute><Feed /></PrivateRoute>
             },
             {
                 path: "/profile",
