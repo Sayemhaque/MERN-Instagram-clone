@@ -4,24 +4,27 @@ import { Link, useNavigate } from "react-router-dom";
 import { AuthContext } from "../../Provider/AuthProvider";
 import { getAuth, updateProfile } from "firebase/auth";
 import app from "../../Firebase/Firebase.config";
+import { ApiContext } from "../../Provider/ApiProvider";
 const auth = getAuth(app)
 const Register = () => {
   const [error,setError] = useState("")
   const {createUser,logOut} = useContext(AuthContext)
+  const { createUserDB} = useContext(ApiContext)
   const navigate = useNavigate()
 
-  const handleRegister = async (e) => {
+  const handleRegister =  (e) => {
    e.preventDefault()
    const form = e.target;
    const name = form.name.value;
    const email = form.email.value;
    const photourl = form.photoUrl.value;
    const password = form.password.value;
-   console.log(name,email,photourl,password);
+   const user = {name,email,photourl};
    createUser(email,password)
    .then((result) => {
     console.log(result.user)
     updateUser(name,photourl)
+    createUserDB(user)
     logOutUser()
     navigate("/login")
    })

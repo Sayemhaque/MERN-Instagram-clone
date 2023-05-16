@@ -1,34 +1,59 @@
-import React from 'react';
+import React, { useContext, useState } from 'react';
 import { SlOptions} from 'react-icons/sl';
-import {  FaRegBookmark, FaRegComment, FaRegHeart, FaRegShareSquare} from "react-icons/fa";
+import {  FaHeart, FaRegBookmark, FaRegComment, FaRegHeart, FaRegShareSquare} from "react-icons/fa";
+import { ApiContext } from '../../Provider/ApiProvider';
 
-const PostCard = () => {
+const PostCard = ({post}) => {
+  const {likePost} = useContext(ApiContext)
+  const {postedBy,userPhoto,caption,photoUrl,likes,_id,userId} = post;
+  const [like , setLikes] = useState(likes)
+  const [liked,setLiked] = useState(false)
+
+  const handleLike = (postId,userId) => {
+   likePost(postId,userId)
+   setLikes([...like,likes.length])
+   setLiked(!liked)
+  }
+
+  const handleUnlike = () => {
+    setLikes(likes.slice(0, -1));
+    setLiked(!liked)
+  }
     return (
         <div className='max-w-[470px] mx-auto py-4'>
             {/* user info */}
            <div className='flex items-center justify-between'>
            <div className='flex items-center gap-2'>
              {/* user photo */}
-             <img className='w-10 h-10 rou rounded-full' src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQ5BOc0hLwVGruCgj9shJMHZoXuijheJa_mxfKJ2deNTJwLMSIrKsVGvI33Qfld2T2lxfk&usqp=CAU" alt="" />
+             <img className='w-10 h-10 rou rounded-full' src={userPhoto} alt="" />
             {/* username */}
-            <p className='font-semibold'>sayemhaque</p>
+            <p className='font-semibold'>{postedBy}</p>
             {/* post date*/}
             <p className='text-gray-400'>2d.</p>
            </div>
            {/* option icon */}
            <div className='text-gray-500 cursor-pointer'>
-            <SlOptions/>
+           <div className="dropdown">
+      <label tabindex="0" class="btn btn-ghost btn-circle">
+       <SlOptions/>
+      </label>
+      <ul tabindex="0" className="menu menu-compact dropdown-content mt-3 p-2 shadow bg-base-100 rounded-box w-52">
+        <li><a>Edit</a></li>
+        <li><a>Delete</a></li>
+      </ul>
+    </div>
            </div>
            </div>
 
            {/* Posted photo */}
           <div className='py-4'>
-          <img className='w-full rounded-md' src="https://images.unsplash.com/photo-1683527272896-3e05e4503085?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxlZGl0b3JpYWwtZmVlZHwxOXx8fGVufDB8fHx8&auto=format&fit=crop&w=400&q=60" alt="" />
+          <img className='w-full rounded-md' src={photoUrl} alt="" />
           </div>
           {/* like,comment and bookmark section */}
           <div className='flex justify-between cursor-pointer'>
           <div className='flex gap-6 items-center text-xl'>
-            <FaRegHeart/>
+           
+           {liked ?   <FaHeart onClick={handleUnlike} /> : <FaRegHeart  onClick={() => handleLike(_id,userId)}/>}
             <FaRegComment/>
             <FaRegShareSquare/>
           </div>
@@ -37,9 +62,9 @@ const PostCard = () => {
           </div>
           </div>
           {/* Total Likes */}
-           <p className='mt-3 text-sm font-semibold text-gray-500'>203 likes</p>
+           <p className='mt-3 text-sm font-semibold text-gray-500'>{like.length}</p>
            {/* caption */}
-           <p className='text-sm mt-2'><span className='font-bold text-sm'>sayemhaque</span> Outing going on.Come join me guys.</p>
+           <p className='text-sm mt-2'><span className='font-bold text-sm'>{postedBy}</span> {caption}</p>
            {/* comments */}
            <p className='font-semibold text-gray-500 text-sm mt-3'>view all comments</p>
            <p className='text-sm mt-2'><span className='font-bold text-sm'>ronitalukder</span> joining you soon</p>
